@@ -8,7 +8,7 @@ export function useShoppingCart() {
 
 export function ShoppingCartProvider({ children }: { children: ReactNode }) {
      return (
-          <ShoppingCartContext.Provider value={{ ShoppingCartContext }} >
+          <ShoppingCartContext.Provider value={ShoppingCartContext} >
                {children}
           </ShoppingCartContext.Provider>
      )

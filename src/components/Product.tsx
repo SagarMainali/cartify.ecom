@@ -1,5 +1,8 @@
+import { useShoppingCart } from "../context/context"
 
 export default function Product({ id, title, image }: { id: number, title: string, image: string }) {
+
+     const shoppingCartContext = useShoppingCart()
 
      const counter = 0
 
