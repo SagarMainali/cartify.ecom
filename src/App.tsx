@@ -6,6 +6,7 @@ import LayoutComponent from './components/LayoutComponent'
 import Cart from './pages/Cart'
 
 export default function App() {
+
      return (
           <div className="app container mx-auto px-8 py-4">
                <Routes>
