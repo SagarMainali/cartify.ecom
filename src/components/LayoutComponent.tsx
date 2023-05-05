@@ -3,7 +3,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 export default function LayoutComponent() {
      return (
           <div>
-               <header className='flex items-center p-3 mb-5 bg-slate-100'>
+               <header className='flex items-center p-3 mb-5 bg-slate-100 rounded-md'>
                     <div className="left-nav text-lg flex gap-5 me-auto">
                          <NavLink to='.' className=' hover:text-blue-600'> Home</NavLink>
                          <NavLink to='/store' className=' hover:text-blue-600'>Store</NavLink>
