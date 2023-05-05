@@ -1,10 +1,10 @@
 
 export default function Product({ id, title, image }: { id: number, title: string, image: string }) {
 
-     const counter = 1
+     const counter = 0
 
      return (
-          <div className="product p-4 bg-white border-2 hover:bg-slate-50 text-sm flex flex-col gap-4 items-center">
+          <div className="product p-4 bg-white border-2 hover:bg-slate-100 duration-150 text-sm flex flex-col gap-4 items-center">
                <div>
                     <img src={image} alt={`product${id}`} className="object-cover h-[9rem]" />
                </div>

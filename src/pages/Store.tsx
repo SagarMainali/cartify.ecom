@@ -14,7 +14,7 @@ export default function Store() {
      console.log(data)
 
      useEffect(() => {
-          fetch('https://fakestoreapi.com/products/category/electronics?limit=6')
+          fetch('https://fakestoreapi.com/products/category/jewelery?limit=6')
                .then(res => res.json())
                .then(json => setData(json))
                .catch(err => console.log(err))
