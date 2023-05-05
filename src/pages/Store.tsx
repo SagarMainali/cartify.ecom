@@ -9,14 +9,15 @@ type DataType = {
 
 export default function Store() {
 
-     const [data, setData] = useState<DataType[]>([])
+     const [data, setData] = useState<DataType[]>()
 
      console.log(data)
 
      useEffect(() => {
-          fetch('https://fakestoreapi.com/products/category/electronics/?limit=5')
+          fetch('https://fakestoreapi.com/products/category/electronics?limit=6')
                .then(res => res.json())
                .then(json => setData(json))
+               .catch(err => console.log(err))
      }, [])
 
      return (
