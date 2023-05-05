@@ -1,17 +1,20 @@
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, useContext, ReactNode } from "react";
 
 type ContextType = {
-     addToCart: () => void
-     removeFromCart: () => void
+     addToCart: () => void,
+     removeFromCart: () => void,
 }
 
-const ShoppingCartContext = createContext({} as ContextType)
+const ShoppingCartContext = createContext<ContextType>({} as ContextType)
 
-export function useShoppingCart() {
+console.log(ShoppingCartContext)
+
+// custom hook
+export function useShoppingCartContext() {
      return useContext(ShoppingCartContext)
 }
 
-export function ShoppingCartProvider({ children }: { children: ReactNode }) {
+export function ShoppingCartContextProvider({ children }: { children: ReactNode }) {
 
      function addToCart() {
           console.log('added')

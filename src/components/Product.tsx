@@ -1,12 +1,12 @@
-import { useShoppingCart } from "../context/context"
+import { useShoppingCartContext } from "../context/context"
 
 export default function Product({ id, title, image }: { id: number, title: string, image: string }) {
 
-     const shoppingCartContext = useShoppingCart()
+     const shoppingCartContext = useShoppingCartContext()
 
-     console.log(shoppingCartContext)
+     // console.log(shoppingCartContext)
 
-     const counter = 0
+     const counter = 1
 
      return (
           <div className="product p-4 bg-white border-2 hover:bg-slate-100 duration-150 text-sm flex flex-col gap-4 items-center">
