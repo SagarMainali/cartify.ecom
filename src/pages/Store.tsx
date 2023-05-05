@@ -22,7 +22,7 @@ export default function Store() {
 
      return (
           <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5">
-               {data ? data.map(item => <Product {...item} />) : <h2>getting products...</h2>}
+               {data ? data.map(item => <Product {...item} />) : <h2 className='text-lg'>loading . . .</h2>}
           </div>
      )
 }
