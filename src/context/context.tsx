@@ -22,7 +22,6 @@ export function ShoppingCartContextProvider({ children }: { children: ReactNode 
      const [data, setData] = useState<ProductType[]>([])
 
      const [selectedData, setSelectedData] = useState('electronics')
-     console.log(data)
 
      useEffect(() => {
           const fetchProducts = async () => {
