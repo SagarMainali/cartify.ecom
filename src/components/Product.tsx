@@ -7,15 +7,15 @@ export default function Product({ image, id, title, price, rating }: ProductType
 
      // console.log(shoppingCartContext)
 
-     const counter = 1
+     const counter = 0
 
      return (
-          <div className="product p-4 bg-white border-2 hover:bg-slate-100 duration-150 text-sm flex flex-col gap-4 items-center">
+          <div className="product p-4 bg-white border-2 hover:bg-slate-100 duration-150 text-sm flex flex-col flex-1 gap-4 items-center">
                <div>
                     <img src={image} alt={`product${id}`} className="object-cover h-[9rem]" />
                </div>
                <hr className="w-full" />
-               <h2>{title}</h2>
+               <h2 className="text-start w-full px-1">{title}</h2>
                <div className="stick-bottom mt-auto w-full">
                     <div className="number-details flex justify-between items-center w-full mb-4 px-1">
                          <h3>Rating <span className="font-semibold text-md">{rating.rate}</span></h3>
