@@ -4,6 +4,8 @@ import { ProductType } from '../types/product_type'
 
 type ContextType = {
      data: ProductType[],
+     selectedData: string,
+     handleChange: (event: React.ChangeEvent<HTMLSelectElement>) => void,
      addToCart: (id: number) => void,
      removeFromCart: (id: number) => void,
 }
@@ -19,10 +21,13 @@ export function ShoppingCartContextProvider({ children }: { children: ReactNode 
 
      const [data, setData] = useState<ProductType[]>([])
 
+     const [selectedData, setSelectedData] = useState('electronics')
+     console.log(data)
+
      useEffect(() => {
           const fetchProducts = async () => {
                try {
-                    const response = await fetch(`https://fakestoreapi.com/products/category/electronics?limit=6`)
+                    const response = await fetch(`https://fakestoreapi.com/products`)
                     const parsedData = await response.json()
                     const updatedData = parsedData.map((item: ProductType) => (
                          {
@@ -75,8 +80,12 @@ export function ShoppingCartContextProvider({ children }: { children: ReactNode 
           setData(updatedData)
      }
 
+     function handleChange(event: React.ChangeEvent<HTMLSelectElement>): void {
+          setSelectedData(event.target.value)
+     }
+
      return (
-          <ShoppingCartContext.Provider value={{ data, addToCart, removeFromCart }} >
+          <ShoppingCartContext.Provider value={{ data, selectedData, handleChange, addToCart, removeFromCart }} >
                {children}
           </ShoppingCartContext.Provider>
      )
