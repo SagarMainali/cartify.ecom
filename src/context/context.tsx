@@ -1,13 +1,11 @@
 import { createContext, useContext, ReactNode } from "react";
 
 type ContextType = {
-     addToCart: () => void,
-     removeFromCart: () => void,
+     addToCart: (id: number) => void,
+     removeFromCart: (id: number) => void,
 }
 
 const ShoppingCartContext = createContext<ContextType>({} as ContextType)
-
-console.log(ShoppingCartContext)
 
 // custom hook
 export function useShoppingCartContext() {
@@ -16,12 +14,12 @@ export function useShoppingCartContext() {
 
 export function ShoppingCartContextProvider({ children }: { children: ReactNode }) {
 
-     function addToCart() {
-          console.log('added')
+     function addToCart(id: number): void {
+          console.log(id)
      }
 
-     function removeFromCart() {
-          console.log('removed')
+     function removeFromCart(id: number): void {
+          console.log(id)
      }
 
      return (

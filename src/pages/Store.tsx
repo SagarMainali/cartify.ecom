@@ -1,16 +1,13 @@
 import { useState, useEffect } from 'react'
 import Product from '../components/Product'
 import { ShoppingCartContextProvider } from '../context/context'
+import { ProductType } from '../types/product_type'
 
 export default function Store() {
 
-     type DataType = {
-          id: number,
-          title: string,
-          image: string
-     }
+     const [data, setData] = useState<ProductType[]>()
 
-     const [data, setData] = useState<DataType[]>()
+     console.log(data)
 
      useEffect(() => {
           fetch(`https://fakestoreapi.com/products/category/electronics?limit=6`)
