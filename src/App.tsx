@@ -11,7 +11,7 @@ export default function App() {
 
      return (
           <ShoppingCartContextProvider >
-               <div className="app container mx-auto px-8 py-4">
+               <div className="app mx-auto px-4 sm:px-8 py-4">
                     <Routes>
                          <Route path='/' element={<LayoutComponent />}>
                               <Route index element={<Home />} />

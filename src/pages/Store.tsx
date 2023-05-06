@@ -1,4 +1,4 @@
-import Product from '../components/Product'
+import Product from '../components/ProductInStore'
 import { useShoppingCartContext } from '../context/context'
 
 export default function Store() {

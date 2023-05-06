@@ -1,7 +1,7 @@
 import { useShoppingCartContext } from "../context/context"
 import { ProductType } from "../types/product_type"
 
-export default function Product({ image, id, title, price, rating, cartQuantity }: ProductType) {
+export default function ProductInStore({ image, id, title, price, rating, cartQuantity }: ProductType) {
 
      const { addToCart, removeFromCart } = useShoppingCartContext()
 
@@ -10,7 +10,7 @@ export default function Product({ image, id, title, price, rating, cartQuantity 
 
 
      return (
-          <div className="product p-4 bg-white border-2 hover:bg-slate-100 duration-150 text-sm flex flex-col flex-1 gap-4 items-center">
+          <div className="product-in-store p-4 bg-white border-2 hover:bg-slate-100 duration-150 text-sm flex flex-col flex-1 gap-4 items-center">
                <div>
                     <img src={image} alt={`product${id}`} className="object-cover h-[9rem]" />
                </div>
@@ -25,7 +25,7 @@ export default function Product({ image, id, title, price, rating, cartQuantity 
                          ? <button onClick={() => addToCart(id)} className="bg-blue-500 py-2 text-white rounded-md w-full hover:scale-105 duration-150">Add to cart</button>
                          : <div className="bottom-3 flex justify-center items-center">
                               <button onClick={() => removeFromCart(id)} className="flex justify-center items-center bg-gray-300 rounded-full h-10 w-10 hover:scale-110 duration-150">-</button>
-                              <span className="px-3">{cartQuantity} in cart</span>
+                              <span className="px-3"><span className="font-semibold">{cartQuantity}</span> in cart</span>
                               <button onClick={() => addToCart(id)} className="flex justify-center items-center bg-gray-300 rounded-full h-10 w-10 hover:scale-110 duration-150">+</button>
                          </div>
                     }
