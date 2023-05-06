@@ -7,13 +7,20 @@ export default function Store() {
 
      const [data, setData] = useState<ProductType[]>()
 
-     // console.log(data)
+     console.log(data)
 
      useEffect(() => {
           fetch(`https://fakestoreapi.com/products/category/electronics?limit=6`)
-               .then(res => res.json())
-               .then(json => setData(json))
-               .catch(err => console.log(err))
+               .then(response => response.json())
+               .then(parsedData => {
+                    return parsedData.map((item: ProductType) => ({
+                         ...item,
+                         cartQuantity: 0
+
+                    }))
+               })
+               .then((updatedData: ProductType[]) => setData(updatedData))
+               .catch(error => console.log(error))
      }, [])
 
      return (
