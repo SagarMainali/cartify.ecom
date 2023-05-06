@@ -19,9 +19,6 @@ export function ShoppingCartContextProvider({ children }: { children: ReactNode 
 
      const [data, setData] = useState<ProductType[]>([])
 
-     // console.log(data)
-     console.log('context rendered')
-
      useEffect(() => {
           fetch(`https://fakestoreapi.com/products/category/electronics?limit=6`)
                .then(response => response.json())

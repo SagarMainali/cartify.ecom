@@ -16,7 +16,6 @@ export default function LayoutComponent() {
                return 0
           }
      }
-     console.log('layout renderd')
      return (
           <div>
                <header className='flex items-center p-3 mb-5 bg-slate-100 rounded-md'>

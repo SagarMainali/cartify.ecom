@@ -5,10 +5,6 @@ export default function ProductInStore({ image, id, title, price, rating, cartQu
 
      const { addToCart, removeFromCart } = useShoppingCartContext()
 
-     // console.log(shoppingCartContext)
-     console.log('product rendered')
-
-
      return (
           <div className="product-in-store p-4 bg-white border-2 hover:bg-slate-100 duration-150 text-sm flex flex-col flex-1 gap-4 items-center">
                <div>

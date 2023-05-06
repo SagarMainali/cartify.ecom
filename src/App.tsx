@@ -7,8 +7,6 @@ import Cart from './pages/Cart'
 import { ShoppingCartContextProvider } from './context/context'
 
 export default function App() {
-     console.log('app rendered')
-
      return (
           <ShoppingCartContextProvider >
                <div className="app mx-auto px-4 sm:px-8 py-4">
