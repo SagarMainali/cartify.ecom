@@ -31,6 +31,6 @@ Start the server
 ```
 
 
-## Demo
+## Demo 
 
-...
+https://cartify-cartify.netlify.app/
