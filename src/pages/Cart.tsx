@@ -1,13 +1,14 @@
 import { useShoppingCartContext } from "../context/context"
 import ProductInCart from "../components/ProductInCart"
+import { ProductType } from "../types/product_type"
 
 export default function Cart() {
      const { data } = useShoppingCartContext()
      const itemsInCart = data.filter(
-          item => item.cartQuantity > 0
+          (item: ProductType) => item.cartQuantity > 0
      )
      const totalPrice = itemsInCart.map(
-          item => (
+          (item: ProductType) => (
                item.cartQuantity * item.price
           )
      )
