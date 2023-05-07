@@ -1,24 +1,25 @@
 import Product from '../components/ProductInStore'
 import { useShoppingCartContext } from '../context/context'
+import { ProductType } from '../types/product_type'
 
 export default function Store() {
 
      const { data, selectedData, handleChange } = useShoppingCartContext()
 
      const category_electronics = data.filter(
-          item => item.category === 'electronics'
+          (item: ProductType) => item.category === 'electronics'
      )
 
      const category_jewelery = data.filter(
-          item => item.category === 'jewelery'
+          (item: ProductType) => item.category === 'jewelery'
      )
 
      const category_mensClothing = data.filter(
-          item => item.category === "men's clothing"
+          (item: ProductType) => item.category === "men's clothing"
      )
 
      const category_womensClothing = data.filter(
-          item => item.category === "women's clothing"
+          (item: ProductType) => item.category === "women's clothing"
      )
 
      return (
