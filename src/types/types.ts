@@ -13,3 +13,11 @@ export type FormDataType = {
      password: string,
      confirm_pw?: string,
 }
+
+export type ContextType = {
+     data: ProductType[],
+     addToCart: (id: number) => void,
+     removeFromCart: (id: number) => void,
+     removeAll: (id: number) => void,
+     clearCart: () => void,
+}

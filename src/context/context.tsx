@@ -1,14 +1,7 @@
 import { createContext, useContext, ReactNode } from "react";
 import { useState, useEffect } from 'react'
 import { ProductType } from '../types/types'
-
-type ContextType = {
-     data: ProductType[],
-     addToCart: (id: number) => void,
-     removeFromCart: (id: number) => void,
-     removeAll: (id: number) => void,
-     clearCart: () => void,
-}
+import { ContextType } from '../types/types'
 
 const ShoppingCartContext = createContext<ContextType>({} as ContextType)
 
