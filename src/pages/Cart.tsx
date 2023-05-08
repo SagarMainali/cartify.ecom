@@ -3,7 +3,7 @@ import ProductInCart from "../components/ProductInCart"
 import { ProductType } from "../types/types"
 
 export default function Cart() {
-     const { data } = useShoppingCartContext()
+     const { data, clearCart } = useShoppingCartContext()
      const itemsInCart = data.filter(
           (item: ProductType) => item.cartQuantity > 0
      )
@@ -23,6 +23,7 @@ export default function Cart() {
                     <div className="checkout text-end flex gap-3 items-center justify-end bg-slate-200 rounded-md px-4 py-2">
                          <h2>Your total: <span className="font-bold">${(totalPrice.reduce((result, number) => result + number)).toFixed(2)}</span></h2>
                          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg">Checkout</button>
+                         <button onClick={clearCart} className="px-4 py-2 bg-blue-600 text-white rounded-lg">Clear Cart</button>
                     </div>
                }
           </div>

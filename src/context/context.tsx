@@ -6,6 +6,8 @@ type ContextType = {
      data: ProductType[],
      addToCart: (id: number) => void,
      removeFromCart: (id: number) => void,
+     removeAll: (id: number) => void,
+     clearCart: () => void,
 }
 
 const ShoppingCartContext = createContext<ContextType>({} as ContextType)
@@ -75,8 +77,36 @@ export function ShoppingCartContextProvider({ children }: { children: ReactNode 
           setData(updatedData)
      }
 
+     function removeAll(id: number): void {
+          const updatedData = data.map(
+               (item: ProductType) => (
+                    item.id === id
+                         ? {
+                              ...item,
+                              cartQuantity: 0
+                         }
+                         : item
+               )
+          )
+          localStorage.setItem('shopping_cart_data', JSON.stringify(updatedData))
+          setData(updatedData)
+     }
+
+     function clearCart(): void {
+          const updatedData = data.map(
+               (item: ProductType) => (
+                    {
+                         ...item,
+                         cartQuantity: 0
+                    }
+               )
+          )
+          localStorage.setItem('shopping_cart_data', JSON.stringify(updatedData))
+          setData(updatedData)
+     }
+
      return (
-          <ShoppingCartContext.Provider value={{ data, addToCart, removeFromCart }} >
+          <ShoppingCartContext.Provider value={{ data, addToCart, removeFromCart, removeAll, clearCart }} >
                {children}
           </ShoppingCartContext.Provider>
      )
