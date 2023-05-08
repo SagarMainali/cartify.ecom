@@ -1,6 +1,6 @@
 import { useShoppingCartContext } from "../context/context"
 import ProductInCart from "../components/ProductInCart"
-import { ProductType } from "../types/product_type"
+import { ProductType } from "../types/types"
 
 export default function Cart() {
      const { data } = useShoppingCartContext()

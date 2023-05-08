@@ -1,10 +1,17 @@
+import { useState } from 'react'
 import Product from '../components/ProductInStore'
 import { useShoppingCartContext } from '../context/context'
-import { ProductType } from '../types/product_type'
+import { ProductType } from '../types/types'
 
 export default function Store() {
 
-     const { data, selectedData, handleChange } = useShoppingCartContext()
+     const [selectedData, setSelectedData] = useState<string>('electronics')
+
+     function handleChange_Select(event: React.ChangeEvent<HTMLSelectElement>): void {
+          setSelectedData(event.target.value)
+     }
+
+     const { data } = useShoppingCartContext()
 
      const category_electronics = data.filter(
           (item: ProductType) => item.category === 'electronics'
@@ -26,7 +33,7 @@ export default function Store() {
           <div>
                <fieldset className='mb-4'>
                     <label htmlFor='select-category'>Category - </label>
-                    <select className='focus:outline-0' id='select-category' value={selectedData} onChange={(handleChange)}>
+                    <select className='focus:outline-0' id='select-category' value={selectedData} onChange={(handleChange_Select)}>
                          <option value="electronics">Electronics</option>
                          <option value="jewelery">Jewelery</option>
                          <option value="mensClothing">Men's Clothing</option>

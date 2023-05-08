@@ -13,7 +13,7 @@ export default function App() {
           <ShoppingCartContextProvider >
                <div className="app mx-auto px-4 sm:px-8 py-4">
                     <Routes>
-                         <Route path='/' element={<LoginPage />} />
+                         <Route path='login' element={<LoginPage />} />
                          <Route path='/signup' element={<SignupPage />} />
                          <Route path='/' element={<LayoutComponent />}>
                               <Route index element={<Home />} />

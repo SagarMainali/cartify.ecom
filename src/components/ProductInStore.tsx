@@ -1,5 +1,5 @@
 import { useShoppingCartContext } from "../context/context"
-import { ProductType } from "../types/product_type"
+import { ProductType } from "../types/types"
 
 export default function ProductInStore({ image, id, title, price, rating, cartQuantity }: ProductType) {
 

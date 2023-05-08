@@ -1,11 +1,9 @@
 import { createContext, useContext, ReactNode } from "react";
 import { useState, useEffect } from 'react'
-import { ProductType } from '../types/product_type'
+import { ProductType } from '../types/types'
 
 type ContextType = {
      data: ProductType[],
-     selectedData: string,
-     handleChange: (event: React.ChangeEvent<HTMLSelectElement>) => void,
      addToCart: (id: number) => void,
      removeFromCart: (id: number) => void,
 }
@@ -20,8 +18,6 @@ export function useShoppingCartContext() {
 export function ShoppingCartContextProvider({ children }: { children: ReactNode }) {
 
      const [data, setData] = useState<ProductType[]>([])
-
-     const [selectedData, setSelectedData] = useState('electronics')
 
      useEffect(() => {
           const fetchProducts = async () => {
@@ -79,12 +75,8 @@ export function ShoppingCartContextProvider({ children }: { children: ReactNode 
           setData(updatedData)
      }
 
-     function handleChange(event: React.ChangeEvent<HTMLSelectElement>): void {
-          setSelectedData(event.target.value)
-     }
-
      return (
-          <ShoppingCartContext.Provider value={{ data, selectedData, handleChange, addToCart, removeFromCart }} >
+          <ShoppingCartContext.Provider value={{ data, addToCart, removeFromCart }} >
                {children}
           </ShoppingCartContext.Provider>
      )
