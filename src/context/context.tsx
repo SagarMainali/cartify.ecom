@@ -10,8 +10,7 @@ import {
      User
 } from 'firebase/auth'
 import { auth } from '../firebase/firebaseConfig'
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom"
 
 // for shopping-cart
 const ShoppingCartContext = createContext<ProductContextType>({} as ProductContextType)
@@ -118,12 +117,6 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
 
 
 
-
-
-
-
-
-
 // for authentication 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
@@ -160,12 +153,13 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           const validation = formValidation(email, password, confirm_pw)
           if (validation === 1) {
                try {
-                    // using await will prevent setErrorMsg from updating
-                    createUserWithEmailAndPassword(auth, email, password)
-               } catch (error) {
-                    console.log(error)
+                    errorMsg && setErrorMsg(null)
+                    await createUserWithEmailAndPassword(auth, email, password)
+               } catch (error: any) {
+                    error.code === 'auth/email-already-in-use'
+                         ? setErrorMsg('Email already in use')
+                         : console.log(error)
                }
-               setErrorMsg(null)
           }
      }
 
@@ -173,16 +167,18 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           const validation = formValidation(email, password)
           if (validation === 1) {
                try {
+                    errorMsg && setErrorMsg(null) //conditional prevents unnecessary render
                     await signInWithEmailAndPassword(auth, email, password)
                } catch (error: any) {
-                    if (error.code === 'auth/invalid-email') {
+                    if (error.code === 'auth/user-not-found') {
                          setErrorMsg('User not found')
+                    } else if (error.code === 'auth/wrong-password') {
+                         setErrorMsg('Wrong Password')
                     }
-                    else if (error.code === 'auth/invalid-email') {
-                         setErrorMsg('Invalid Password')
+                    else {
+                         console.log(error)
                     }
                }
-               setErrorMsg(null)
           }
      }
 
