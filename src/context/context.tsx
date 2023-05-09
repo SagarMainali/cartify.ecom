@@ -175,7 +175,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
      async function logout() {
           try {
                signOut(auth)
-               navigate('/')
+               navigate('/login')
           } catch (error) {
                console.log(error)
           }
