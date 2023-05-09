@@ -1,16 +1,25 @@
 import { createContext, useContext, ReactNode } from "react";
 import { useState, useEffect } from 'react'
 import { ProductType } from '../types/types'
-import { ContextType } from '../types/types'
+import { ProductContextType, AuthContextType } from '../types/types'
+import {
+     createUserWithEmailAndPassword,
+     // signInWithEmailAndPassword,
+     // signOut,
+     // onAuthStateChanged
+} from 'firebase/auth'
+import { auth } from '../firebase/firebaseConfig'
 
-const ShoppingCartContext = createContext<ContextType>({} as ContextType)
 
-// custom hook
-export function useShoppingCartContext() {
+// for shopping-cart
+const ShoppingCartContext = createContext<ProductContextType>({} as ProductContextType)
+
+// custom hook - used at the time of consuming the context
+export const useShoppingCartContext = () => {
      return useContext(ShoppingCartContext)
 }
 
-export function ShoppingCartContextProvider({ children }: { children: ReactNode }) {
+export const ShoppingCartContextProvider = ({ children }: { children: ReactNode }) => {
 
      const [data, setData] = useState<ProductType[]>([])
 
@@ -104,3 +113,32 @@ export function ShoppingCartContextProvider({ children }: { children: ReactNode 
           </ShoppingCartContext.Provider>
      )
 }
+
+
+
+// for authentication 
+export const AuthContext = createContext<AuthContextType>({} as AuthContextType)
+
+// custom hook - used at the time of consuming the context
+export const useAuthContext = () => {
+     return useContext(AuthContext)
+}
+
+export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
+
+     function signUp(email: string, password: string): void {
+          createUserWithEmailAndPassword(auth, email, password)
+               .then((userCredential) => {
+                    console.log(userCredential)
+               })
+               .catch((error) => {
+                    console.log(error)
+               })
+     }
+
+     return (
+          <AuthContext.Provider value={{ signUp }}>
+               {children}
+          </AuthContext.Provider>
+     )
+}    

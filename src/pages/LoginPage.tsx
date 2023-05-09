@@ -3,11 +3,11 @@ import { useState } from "react"
 import { FormDataType } from '../types/types'
 import { signInWithEmailAndPassword } from "firebase/auth"
 import { auth } from '../firebase/firebaseConfig'
-import { useNavigate } from "react-router-dom"
+// import { useNavigate } from "react-router-dom"
 
 export default function LoginPage() {
 
-     const navigate = useNavigate()
+     // const navigate = useNavigate()
 
      const [formData, setFormData] = useState<FormDataType>(
           {
@@ -52,7 +52,7 @@ export default function LoginPage() {
                     <input className="bg-slate-100 w-[20rem] px-4 py-2 rounded-md outline-0" name="email" type="email" placeholder="Email" onChange={handleChange_Login} value={formData.email} />
                     <input className="bg-slate-100 w-[20rem] px-4 py-2 rounded-md outline-0" name="password" type="password" placeholder="Password" onChange={handleChange_Login} value={formData.password} />
                     <button className="bg-blue-500 text-white px-4 py-2 rounded-md" onClick={login}>Login</button>
-                    <h2 className="text-gray-600">Don't have an account? <NavLink className='text-blue-500 font-semibold hover:underline' to='/signup'>Signup instead</NavLink></h2>
+                    <h2 className="text-gray-600">Don't have an account? <NavLink className='text-blue-500 font-semibold hover:underline' to='/signup' replace>Signup instead</NavLink></h2>
                </div>
           </div>
      )

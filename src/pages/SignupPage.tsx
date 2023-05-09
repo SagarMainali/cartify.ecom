@@ -1,10 +1,11 @@
 import { NavLink } from "react-router-dom"
 import { useState } from 'react'
 import { FormDataType } from '../types/types'
-import { createUserWithEmailAndPassword } from "firebase/auth"
-import { auth } from '../firebase/firebaseConfig'
+import { useAuthContext } from "../context/context"
 
 export default function SignupPage() {
+
+     const { signUp } = useAuthContext()
 
      const [formData, setFormData] = useState<FormDataType>(
           {
@@ -29,16 +30,6 @@ export default function SignupPage() {
           )
      }
 
-     function signUp() {
-          createUserWithEmailAndPassword(auth, formData.email, formData.password)
-               .then((userCredential) => {
-                    console.log(userCredential)
-               })
-               .catch((error) => {
-                    console.log(error)
-               })
-     }
-
      return (
           <div className="login-page flex flex-col justify-center items-center gap-6 mt-20">
                <div className="title">
@@ -48,8 +39,8 @@ export default function SignupPage() {
                <input className="bg-slate-100 w-[20rem] px-4 py-2 rounded-md outline-0" name="email" type="email" placeholder="Email" onChange={handleChange_singup} value={formData.email} />
                <input className="bg-slate-100 w-[20rem] px-4 py-2 rounded-md outline-0" name="password" type="password" placeholder="Password" onChange={handleChange_singup} value={formData.password} />
                <input className="bg-slate-100 w-[20rem] px-4 py-2 rounded-md outline-0" name="confirm_pw" type="password" placeholder="Confirm Password" onChange={handleChange_singup} value={formData.confirm_pw} />
-               <button className="bg-blue-500 text-white px-4 py-2 rounded-md" onClick={signUp}>Sign Up</button>
-               <h2 className="text-gray-600">Already have an account? <NavLink className='text-blue-500 font-semibold hover:underline' to='/login'>Login instead</NavLink></h2>
+               <button className="bg-blue-500 text-white px-4 py-2 rounded-md" onClick={() => signUp(formData.email, formData.password)}>Sign Up</button>
+               <h2 className="text-gray-600">Already have an account? <NavLink className='text-blue-500 font-semibold hover:underline' to='/login' replace>Login instead</NavLink></h2>
           </div>
      )
 }
