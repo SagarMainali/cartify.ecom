@@ -5,10 +5,11 @@ import { ProductContextType, AuthContextType } from '../types/types'
 import {
      createUserWithEmailAndPassword,
      signInWithEmailAndPassword,
+     onAuthStateChanged,
      // signOut,
-     // onAuthStateChanged
 } from 'firebase/auth'
 import { auth } from '../firebase/firebaseConfig'
+import { Navigate } from "react-router-dom";
 
 
 // for shopping-cart
@@ -126,6 +127,24 @@ export const useAuthContext = () => {
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
+     const [loading, setLoading] = useState<boolean>(true)
+
+     useEffect(() => {
+          const checkUserLoginStatus = onAuthStateChanged(auth, (currentUser) => {
+               console.log(currentUser)
+               if (currentUser) {
+                    <Navigate to='/' />
+               }
+               else {
+                    <Navigate to='/login' />
+               }
+               setLoading(false)
+          })
+          return () => {
+               checkUserLoginStatus()
+          }
+     }, [])
+
      async function signUp(email: string, password: string): Promise<void> {
           try {
                const userCredential = await createUserWithEmailAndPassword(auth, email, password)
@@ -146,7 +165,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
      return (
           <AuthContext.Provider value={{ signUp, login }}>
-               {children}
+               {loading ? <h1>loading</h1> : children}
           </AuthContext.Provider>
      )
 }    

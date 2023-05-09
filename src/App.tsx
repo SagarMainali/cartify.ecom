@@ -8,13 +8,15 @@ import { ShoppingCartContextProvider, AuthContextProvider } from './context/cont
 import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 
+
 export default function App() {
+
      return (
           <ShoppingCartContextProvider >
                <AuthContextProvider>
                     <div className="app mx-auto px-4 sm:px-8 py-4">
                          <Routes>
-                              <Route path='login' element={<LoginPage />} />
+                              <Route path='/login' element={<LoginPage />} />
                               <Route path='/signup' element={<SignupPage />} />
                               <Route path='/' element={<LayoutComponent />}>
                                    <Route index element={<Home />} />
