@@ -5,7 +5,7 @@ import { useAuthContext } from "../context/context"
 
 export default function LoginPage() {
 
-     const { login } = useAuthContext()
+     const { login, errorMsg } = useAuthContext()
 
      const [formData, setFormData] = useState<FormDataType>(
           {
@@ -40,6 +40,7 @@ export default function LoginPage() {
                     <input className="bg-slate-100 w-[20rem] px-4 py-2 rounded-md outline-0" name="password" type="password" placeholder="Password" onChange={handleChange_Login} value={formData.password} />
                     <button className="bg-blue-600 text-white px-4 py-2 rounded-md" onClick={() => login(formData.email, formData.password)}>Login</button>
                     <h2 className="text-gray-600">Don't have an account? <NavLink className='text-blue-500 font-semibold hover:underline' to='/signup' replace>Signup instead</NavLink></h2>
+                    {errorMsg && <p className="text-sm text-red-600 italic">*{errorMsg}*</p>}
                </div>
           </div>
      )

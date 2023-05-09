@@ -160,8 +160,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           const validation = formValidation(email, password, confirm_pw)
           if (validation === 1) {
                try {
-                    formValidation(email, password)
-                    await createUserWithEmailAndPassword(auth, email, password)
+                    // using await will prevent setErrorMsg from updating
+                    createUserWithEmailAndPassword(auth, email, password)
                } catch (error) {
                     console.log(error)
                }
@@ -174,8 +174,13 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           if (validation === 1) {
                try {
                     await signInWithEmailAndPassword(auth, email, password)
-               } catch (error) {
-                    console.log(error)
+               } catch (error: any) {
+                    if (error.code === 'auth/invalid-email') {
+                         setErrorMsg('User not found')
+                    }
+                    else if (error.code === 'auth/invalid-email') {
+                         setErrorMsg('Invalid Password')
+                    }
                }
                setErrorMsg(null)
           }
@@ -203,7 +208,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                setErrorMsg('Invalid email format')
                return 0
           }
-          else if (password !== confirm_pw) {
+          else if (confirm_pw && password !== confirm_pw) {
                setErrorMsg('Passwords do not match')
                return 0
           }
