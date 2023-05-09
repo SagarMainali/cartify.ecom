@@ -138,19 +138,20 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
      const [loggedInUser, setLoggedInUser] = useState<User | null>(null)
 
-     // const [loading, setLoading] = useState<boolean>(true)
+     const [blank, setBlank] = useState<boolean>(true)
 
      useEffect(() => {
-          onAuthStateChanged(auth, (currentUser) => {
-               setLoggedInUser(currentUser)
+          const checkUserLoginStatus = onAuthStateChanged(auth, (currentUser) => {
                if (currentUser) {
                     navigate('/')
+                    setLoggedInUser(currentUser)
                }
                else {
                     navigate('/login')
                }
-               // setLoading(false)
+               setBlank(false)
           })
+          return () => checkUserLoginStatus()
      }, [])
 
      async function signUp(email: string, password: string): Promise<void> {
@@ -182,7 +183,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
      return (
           <AuthContext.Provider value={{ signUp, login, logout, loggedInUser }}>
-               {children}
+               {!blank && children}
           </AuthContext.Provider>
      )
 }    
