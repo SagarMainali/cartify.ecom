@@ -135,15 +135,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           }
      }
 
-     // createUserWithEmailAndPassword(auth, email, password)
-     //      .then((userCredential) => {
-     //           console.log(userCredential)
-     //      })
-     //      .catch((error) => {
-     //           console.log(error)
-     //      })
-
-
      async function login(email: string, password: string): Promise<void> {
           try {
                const userCredential = await signInWithEmailAndPassword(auth, email, password)
