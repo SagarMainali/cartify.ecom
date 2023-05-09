@@ -23,5 +23,6 @@ export type ProductContextType = {
 }
 
 export type AuthContextType = {
-     signUp: (email: string, password: string) => void
+     signUp: (email: string, password: string) => Promise<void>,
+     login: (email: string, password: string) => Promise<void>
 }

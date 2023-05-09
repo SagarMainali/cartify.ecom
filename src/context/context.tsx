@@ -4,7 +4,7 @@ import { ProductType } from '../types/types'
 import { ProductContextType, AuthContextType } from '../types/types'
 import {
      createUserWithEmailAndPassword,
-     // signInWithEmailAndPassword,
+     signInWithEmailAndPassword,
      // signOut,
      // onAuthStateChanged
 } from 'firebase/auth'
@@ -126,18 +126,35 @@ export const useAuthContext = () => {
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
-     function signUp(email: string, password: string): void {
-          createUserWithEmailAndPassword(auth, email, password)
-               .then((userCredential) => {
-                    console.log(userCredential)
-               })
-               .catch((error) => {
-                    console.log(error)
-               })
+     async function signUp(email: string, password: string): Promise<void> {
+          try {
+               const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+               console.log(userCredential)
+          } catch (error) {
+               console.log(error)
+          }
+     }
+
+     // createUserWithEmailAndPassword(auth, email, password)
+     //      .then((userCredential) => {
+     //           console.log(userCredential)
+     //      })
+     //      .catch((error) => {
+     //           console.log(error)
+     //      })
+
+
+     async function login(email: string, password: string): Promise<void> {
+          try {
+               const userCredential = await signInWithEmailAndPassword(auth, email, password)
+               console.log(userCredential)
+          } catch (err) {
+               console.log(err)
+          }
      }
 
      return (
-          <AuthContext.Provider value={{ signUp }}>
+          <AuthContext.Provider value={{ signUp, login }}>
                {children}
           </AuthContext.Provider>
      )
