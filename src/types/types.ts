@@ -1,3 +1,5 @@
+import { User } from "firebase/auth"
+
 export type ProductType = {
      id: number,
      image: string,
@@ -24,5 +26,7 @@ export type ProductContextType = {
 
 export type AuthContextType = {
      signUp: (email: string, password: string) => Promise<void>,
-     login: (email: string, password: string) => Promise<void>
+     login: (email: string, password: string) => Promise<void>,
+     logout: () => Promise<void>,
+     loggedInUser: User | null
 }

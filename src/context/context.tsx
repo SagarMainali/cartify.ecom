@@ -6,10 +6,11 @@ import {
      createUserWithEmailAndPassword,
      signInWithEmailAndPassword,
      onAuthStateChanged,
-     // signOut,
+     signOut,
+     User
 } from 'firebase/auth'
 import { auth } from '../firebase/firebaseConfig'
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 // for shopping-cart
@@ -117,6 +118,12 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
 
 
 
+
+
+
+
+
+
 // for authentication 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 
@@ -127,22 +134,23 @@ export const useAuthContext = () => {
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
-     const [loading, setLoading] = useState<boolean>(true)
+     const navigate = useNavigate()
+
+     const [loggedInUser, setLoggedInUser] = useState<User | null>(null)
+
+     // const [loading, setLoading] = useState<boolean>(true)
 
      useEffect(() => {
-          const checkUserLoginStatus = onAuthStateChanged(auth, (currentUser) => {
-               console.log(currentUser)
+          onAuthStateChanged(auth, (currentUser) => {
+               setLoggedInUser(currentUser)
                if (currentUser) {
-                    <Navigate to='/' />
+                    navigate('/')
                }
                else {
-                    <Navigate to='/login' />
+                    navigate('/login')
                }
-               setLoading(false)
+               // setLoading(false)
           })
-          return () => {
-               checkUserLoginStatus()
-          }
      }, [])
 
      async function signUp(email: string, password: string): Promise<void> {
@@ -163,9 +171,18 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           }
      }
 
+     async function logout() {
+          try {
+               signOut(auth)
+               navigate('/')
+          } catch (error) {
+               console.log(error)
+          }
+     }
+
      return (
-          <AuthContext.Provider value={{ signUp, login }}>
-               {loading ? <h1>loading</h1> : children}
+          <AuthContext.Provider value={{ signUp, login, logout, loggedInUser }}>
+               {children}
           </AuthContext.Provider>
      )
 }    
