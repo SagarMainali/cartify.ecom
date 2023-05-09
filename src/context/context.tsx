@@ -140,6 +140,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
      const [blank, setBlank] = useState<boolean>(true)
 
+     const [errorMsg, setErrorMsg] = useState<string | null>(null)
+
      useEffect(() => {
           const checkUserLoginStatus = onAuthStateChanged(auth, (currentUser) => {
                if (currentUser) {
@@ -154,21 +156,28 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           return () => checkUserLoginStatus()
      }, [])
 
-     async function signUp(email: string, password: string): Promise<void> {
-          try {
-               const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-               console.log(userCredential)
-          } catch (error) {
-               console.log(error)
+     async function signUp(email: string, password: string, confirm_pw?: string): Promise<void> {
+          const validation = formValidation(email, password, confirm_pw)
+          if (validation === 1) {
+               try {
+                    formValidation(email, password)
+                    await createUserWithEmailAndPassword(auth, email, password)
+               } catch (error) {
+                    console.log(error)
+               }
+               setErrorMsg(null)
           }
      }
 
      async function login(email: string, password: string): Promise<void> {
-          try {
-               const userCredential = await signInWithEmailAndPassword(auth, email, password)
-               console.log(userCredential)
-          } catch (err) {
-               console.log(err)
+          const validation = formValidation(email, password)
+          if (validation === 1) {
+               try {
+                    await signInWithEmailAndPassword(auth, email, password)
+               } catch (error) {
+                    console.log(error)
+               }
+               setErrorMsg(null)
           }
      }
 
@@ -181,8 +190,28 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           }
      }
 
+     function formValidation(email: string, password: string, confirm_pw?: string) {
+          if (!email || !password) {
+               setErrorMsg('One of the field is empty')
+               return 0
+          }
+          else if (password.length < 6) {
+               setErrorMsg('Password length must be at least 6')
+               return 0
+          }
+          else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+               setErrorMsg('Invalid email format')
+               return 0
+          }
+          else if (password !== confirm_pw) {
+               setErrorMsg('Passwords do not match')
+               return 0
+          }
+          return 1
+     }
+
      return (
-          <AuthContext.Provider value={{ signUp, login, logout, loggedInUser }}>
+          <AuthContext.Provider value={{ signUp, login, logout, loggedInUser, errorMsg }}>
                {!blank && children}
           </AuthContext.Provider>
      )

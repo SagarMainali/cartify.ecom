@@ -13,7 +13,7 @@ export type ProductType = {
 export type FormDataType = {
      email: string,
      password: string,
-     confirm_pw?: string,
+     confirm_pw?: string
 }
 
 export type ProductContextType = {
@@ -25,8 +25,9 @@ export type ProductContextType = {
 }
 
 export type AuthContextType = {
-     signUp: (email: string, password: string) => Promise<void>,
+     signUp: (email: string, password: string, confirm_pw?: string) => Promise<void>,
      login: (email: string, password: string) => Promise<void>,
      logout: () => Promise<void>,
-     loggedInUser: User | null
+     loggedInUser: User | null,
+     errorMsg: string | null
 }
