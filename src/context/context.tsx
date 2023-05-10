@@ -141,12 +141,11 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           const checkUserLoginStatus = onAuthStateChanged(auth, (currentUser) => {
                if (currentUser) {
                     navigate('/')
-                    setLoggedInUser(currentUser)
                }
                else {
                     navigate('/login')
-                    setLoggedInUser(null)
                }
+               setLoggedInUser(currentUser)
                setBlank(false)
           })
           return () => checkUserLoginStatus()
