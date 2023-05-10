@@ -135,6 +135,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
      const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
+     // runs only once at the initial render however this initial run sets the onAuthStateChanged that immediately gets triggered with the current auth state and
+     // gets triggered everytime the auth state next time
      useEffect(() => {
           const checkUserLoginStatus = onAuthStateChanged(auth, (currentUser) => {
                if (currentUser) {
