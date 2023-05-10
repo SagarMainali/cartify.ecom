@@ -193,7 +193,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
      function formValidation(email: string, password: string, confirm_pw?: string) {
           if (!email || !password) {
-               setErrorMsg('One of the field is empty')
+               setErrorMsg('Empty field detected')
                return 0
           }
           else if (password.length < 6) {
