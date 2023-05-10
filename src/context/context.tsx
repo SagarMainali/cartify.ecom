@@ -150,8 +150,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
      }, [])
 
      async function signUp(email: string, password: string, confirm_pw?: string): Promise<void> {
-          const validation = formValidation(email, password, confirm_pw)
-          if (validation === 1) {
+          const validation: string = formValidation(email, password, confirm_pw)
+          if (validation === 'pass') {
                try {
                     errorMsg && setErrorMsg(null)
                     await createUserWithEmailAndPassword(auth, email, password)
@@ -164,8 +164,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
      }
 
      async function login(email: string, password: string): Promise<void> {
-          const validation = formValidation(email, password)
-          if (validation === 1) {
+          const validation: string = formValidation(email, password)
+          if (validation === 'pass') {
                try {
                     errorMsg && setErrorMsg(null) //conditional prevents unnecessary render
                     await signInWithEmailAndPassword(auth, email, password)
@@ -194,21 +194,21 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
      function formValidation(email: string, password: string, confirm_pw?: string) {
           if (!email || !password) {
                setErrorMsg('Empty field detected')
-               return 0
+               return 'fail'
           }
           else if (password.length < 6) {
                setErrorMsg('Password length must be at least 6')
-               return 0
+               return 'fail'
           }
           else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
                setErrorMsg('Invalid email format')
-               return 0
+               return 'fail'
           }
           else if (confirm_pw && password !== confirm_pw) {
                setErrorMsg('Passwords do not match')
-               return 0
+               return 'fail'
           }
-          return 1
+          return 'pass'
      }
 
      return (

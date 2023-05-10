@@ -16,14 +16,14 @@ export default function App() {
                <AuthContextProvider>
                     <div className="app mx-auto px-4 sm:px-8 py-4">
                          <Routes>
-                              <Route path='/login' element={<LoginPage />} />
-                              <Route path='/signup' element={<SignupPage />} />
                               <Route path='/' element={<LayoutComponent />}>
                                    <Route index element={<Home />} />
                                    <Route path='/store' element={<Store />} />
                                    <Route path='/about' element={<About />} />
                                    <Route path='/cart' element={<Cart />} />
                               </Route>
+                              <Route path='/login' element={<LoginPage />} />
+                              <Route path='/signup' element={<SignupPage />} />
                          </Routes>
                     </div>
                </AuthContextProvider>
