@@ -10,10 +10,9 @@ import SignupPage from './pages/SignupPage'
 
 
 export default function App() {
-
      return (
-          <ShoppingCartContextProvider >
-               <AuthContextProvider>
+          <AuthContextProvider>
+               <ShoppingCartContextProvider >
                     <div className="app mx-auto px-4 sm:px-8 py-4">
                          <Routes>
                               <Route path='/' element={<LayoutComponent />}>
@@ -26,8 +25,7 @@ export default function App() {
                               <Route path='/signup' element={<SignupPage />} />
                          </Routes>
                     </div>
-               </AuthContextProvider>
-          </ShoppingCartContextProvider >
-
+               </ShoppingCartContextProvider >
+          </AuthContextProvider>
      )
 }
