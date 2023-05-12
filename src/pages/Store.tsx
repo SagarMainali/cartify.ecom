@@ -11,21 +11,21 @@ export default function Store() {
           setSelectedData(event.target.value)
      }
 
-     const { data } = useShoppingCartContext()
+     const { products } = useShoppingCartContext()
 
-     const category_electronics = data.filter(
+     const category_electronics = products.filter(
           (item: ProductType) => item.category === 'electronics'
      )
 
-     const category_jewelery = data.filter(
+     const category_jewelery = products.filter(
           (item: ProductType) => item.category === 'jewelery'
      )
 
-     const category_mensClothing = data.filter(
+     const category_mensClothing = products.filter(
           (item: ProductType) => item.category === "men's clothing"
      )
 
-     const category_womensClothing = data.filter(
+     const category_womensClothing = products.filter(
           (item: ProductType) => item.category === "women's clothing"
      )
 

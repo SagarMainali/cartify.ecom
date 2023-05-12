@@ -132,8 +132,7 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
 
      // const { loggedInUser } = useAuthContext()
 
-     const [data, setData] = useState<ProductType[]>([])
-     console.log(data)
+     const [products, setProducts] = useState<ProductType[]>([])
 
      useEffect(() => {
           const fetchProducts = async () => {
@@ -141,7 +140,7 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                     const response = await fetch(`https://fakestoreapi.com/products`)
                     const parsedData = await response.json()
                     console.log(parsedData)
-                    const allProducts = parsedData.map((item: ProductType) => {
+                    const products_modified = parsedData.map((item: ProductType) => {
                          // excluding unnecessary description property
                          const { description, ...rest } = item
                          return {
@@ -149,8 +148,8 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                               cartQuantity: 0
                          }
                     })
-                    setData(allProducts)
-                    localStorage.setItem('products', JSON.stringify(allProducts))
+                    setProducts(products_modified)
+                    localStorage.setItem('products', JSON.stringify(products_modified))
                     // await setDoc(doc(firestore, 'user_cart_data', 'asdf'), {
                     //      data: allProducts
                     // })
@@ -161,14 +160,14 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
 
           const localData = localStorage.getItem('products')
           if (localData) {
-               setData(JSON.parse(localData))
+               setProducts(JSON.parse(localData))
           } else {
                fetchProducts()
           }
      }, [])
 
      async function addToCart(id: number): Promise<void> {
-          const updatedData = data.map(
+          const updatedData = products.map(
                (item: ProductType) => (
                     item.id === id
                          ? {
@@ -184,12 +183,12 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
           // })
 
           localStorage.setItem('products', JSON.stringify(updatedData))
-          setData(updatedData)
+          setProducts(updatedData)
 
      }
 
      function removeFromCart(id: number): void {
-          const updatedData = data.map(
+          const updatedData = products.map(
                (item: ProductType) => (
                     item.id === id
                          ? {
@@ -200,11 +199,11 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                )
           )
           localStorage.setItem('products', JSON.stringify(updatedData))
-          setData(updatedData)
+          setProducts(updatedData)
      }
 
      function removeAll(id: number): void {
-          const updatedData = data.map(
+          const updatedData = products.map(
                (item: ProductType) => (
                     item.id === id
                          ? {
@@ -215,11 +214,11 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                )
           )
           localStorage.setItem('products', JSON.stringify(updatedData))
-          setData(updatedData)
+          setProducts(updatedData)
      }
 
      function clearCart(): void {
-          const updatedData = data.map(
+          const updatedData = products.map(
                (item: ProductType) => (
                     {
                          ...item,
@@ -228,11 +227,11 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                )
           )
           localStorage.setItem('products', JSON.stringify(updatedData))
-          setData(updatedData)
+          setProducts(updatedData)
      }
 
      return (
-          <ShoppingCartContext.Provider value={{ data, addToCart, removeFromCart, removeAll, clearCart }} >
+          <ShoppingCartContext.Provider value={{ products, addToCart, removeFromCart, removeAll, clearCart }} >
                {children}
           </ShoppingCartContext.Provider>
      )
