@@ -1,9 +1,9 @@
 import { useShoppingCartContext } from "../context/context"
 import { ProductType } from "../types/types"
 
-export default function ProductInStore({ image, id, title, price, rating, cartQuantity }: ProductType) {
+export default function ProductInStore({ image, id, title, price, rating }: ProductType) {
 
-     const { addToCart, removeFromCart } = useShoppingCartContext()
+     const { addToCart } = useShoppingCartContext()
 
      return (
           <div className="product-in-store p-4 bg-white border-2 hover:bg-slate-100 duration-150 text-sm flex flex-col flex-1 gap-4 items-center">
@@ -17,14 +17,12 @@ export default function ProductInStore({ image, id, title, price, rating, cartQu
                          <h3>Rating <span className="font-semibold text-md">{rating.rate}</span></h3>
                          <h3>Price <span className="font-semibold text-md">${price}</span></h3>
                     </div>
-                    {cartQuantity < 1
-                         ? <button onClick={() => addToCart(id)} className="bg-blue-500 py-2 text-white rounded-md w-full hover:scale-105 duration-150">Add to cart</button>
-                         : <div className="bottom-3 flex justify-center items-center">
-                              <button onClick={() => removeFromCart(id)} className="flex justify-center items-center bg-gray-300 rounded-full h-10 w-10 hover:scale-110 duration-150">-</button>
-                              <span className="px-3"><span className="font-semibold">{cartQuantity}</span> in cart</span>
-                              <button onClick={() => addToCart(id)} className="flex justify-center items-center bg-gray-300 rounded-full h-10 w-10 hover:scale-110 duration-150">+</button>
-                         </div>
-                    }
+                    <button onClick={() => addToCart(id)} className="bg-blue-500 py-2 text-white rounded-md w-full hover:scale-105 duration-150">Add to cart</button>
+                    {/* <div className="bottom-3 flex justify-center items-center">
+                         <button onClick={() => removeFromCart(id)} className="flex justify-center items-center bg-gray-300 rounded-full h-10 w-10 hover:scale-110 duration-150">-</button>
+                         <span className="px-3"><span className="font-semibold">{cartQuantity}</span> in cart</span>
+                         <button onClick={() => addToCart(id)} className="flex justify-center items-center bg-gray-300 rounded-full h-10 w-10 hover:scale-110 duration-150">+</button>
+                    </div> */}
                </div>
           </div>
      )
