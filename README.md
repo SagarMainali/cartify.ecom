@@ -35,4 +35,5 @@ Start the server
 
 ## Demo 
 
+currently on update...some function might not work
 https://cartify-cartify.netlify.app/
