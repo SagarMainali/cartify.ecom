@@ -9,8 +9,8 @@ import {
      signOut,
      User
 } from 'firebase/auth'
-// import { doc, setDoc } from 'firebase/firestore'
-import { auth } from '../firebase/firebaseConfig'
+import { doc, setDoc, getDoc } from 'firebase/firestore'
+import { auth, firestore } from '../firebase/firebaseConfig'
 import { useNavigate } from "react-router-dom"
 
 
@@ -130,30 +130,39 @@ export const useShoppingCartContext = () => {
 
 export const ShoppingCartContextProvider = ({ children }: { children: ReactNode }) => {
 
-     // const { loggedInUser } = useAuthContext()
+     const { loggedInUser } = useAuthContext()
 
      const [data, setData] = useState<ProductType[]>([])
-     console.log(data)
 
      useEffect(() => {
+
           const fetchProducts = async () => {
                try {
-                    const response = await fetch(`https://fakestoreapi.com/products`)
-                    const parsedData = await response.json()
-                    console.log(parsedData)
-                    const allProducts = parsedData.map((item: ProductType) => {
-                         // excluding unnecessary description property
-                         const { description, ...rest } = item
-                         return {
-                              ...rest,
-                              cartQuantity: 0
+                    // although this component renders only when user is logged in, if statement is used only to avoid 'loggedInUser may possbily be null'
+                    if (loggedInUser) {
+                         const docRef = doc(firestore, 'user_data', loggedInUser.uid)
+                         const docSnap = await getDoc(docRef)
+
+                         if (docSnap.exists()) {
+                              console.log('doc found')
+                         } else {
+                              const response = await fetch(`https://fakestoreapi.com/products`)
+                              const parsedData = await response.json()
+                              const allProducts = parsedData.map((item: ProductType) => {
+                                   // excluding unnecessary description property
+                                   const { description, ...rest } = item
+                                   return {
+                                        ...rest,
+                                        cartQuantity: 0
+                                   }
+                              })
+                              setData(allProducts)
+                              // localStorage.setItem('products', JSON.stringify(allProducts))
+                              await setDoc(doc(firestore, 'user_data', loggedInUser.uid), {
+                                   data: allProducts
+                              })
                          }
-                    })
-                    setData(allProducts)
-                    localStorage.setItem('products', JSON.stringify(allProducts))
-                    // await setDoc(doc(firestore, 'user_cart_data', 'asdf'), {
-                    //      data: allProducts
-                    // })
+                    }
                } catch (error) {
                     console.log(error)
                }
