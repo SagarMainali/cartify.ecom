@@ -213,9 +213,17 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                                         }
                                    }
                                    else {
-                                        return {
-                                             ...productInCart,
-                                             cartQuantity: productInCart.cartQuantity - 1
+                                        if (productInCart.cartQuantity === 1) {
+                                             return {
+                                                  ...productInCart,
+                                                  cartQuantity: 1
+                                             }
+                                        }
+                                        else {
+                                             return {
+                                                  ...productInCart,
+                                                  cartQuantity: productInCart.cartQuantity - 1
+                                             }
                                         }
                                    }
                               }
