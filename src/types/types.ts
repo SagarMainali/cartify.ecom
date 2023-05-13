@@ -4,7 +4,7 @@ export type ProductType = {
      id: number,
      image: string,
      title: string,
-     rating: {rate: number},
+     rating: { rate: number },
      rate: number,
      price: number,
      category: string,
@@ -20,7 +20,8 @@ export type FormDataType = {
 
 export type ProductContextType = {
      products: ProductType[],
-     addToCart: (id: number) => void,
+     productsInCart: ProductType[],
+     addToCart: (productToAdd: ProductType) => void,
      removeFromCart: (id: number) => void,
      removeAll: (id: number) => void,
      clearCart: () => void,

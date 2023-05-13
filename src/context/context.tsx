@@ -134,6 +134,10 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
 
      const [products, setProducts] = useState<ProductType[]>([])
 
+     const [productsInCart, setProductsInCart] = useState<ProductType[]>([])
+
+     console.log(productsInCart)
+
      useEffect(() => {
           const fetchProducts = async () => {
                try {
@@ -166,29 +170,68 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
           }
      }, [])
 
-     async function addToCart(id: number): Promise<void> {
-          const updatedData = products.map(
-               (item: ProductType) => (
-                    item.id === id
-                         ? {
-                              ...item,
-                              cartQuantity: item.cartQuantity + 1
+     function addToCart(productToAdd: ProductType): void {
+          setProductsInCart(
+               (currentProductsInCart: ProductType[]) => {
+                    if (currentProductsInCart.length === 0) {
+                         return [{
+                              ...productToAdd,
+                              cartQuantity: 1
+                         }]
+                    }
+                    else {
+                         let productMatch: boolean = false
+                         const updatedProductsInCart = currentProductsInCart.map(
+                              (productInCart: ProductType) => {
+                                   if (productInCart.id === productToAdd.id) {
+                                        productMatch = true
+                                        return {
+                                             ...productInCart,
+                                             cartQuantity: productInCart.cartQuantity + 1
+                                        }
+                                   }
+                                   else {
+                                        return {
+                                             ...productInCart
+                                        }
+                                   }
+                              }
+                         )
+                         if (productMatch) {
+                              return updatedProductsInCart
                          }
-                         : item
-               )
+                         else {
+                              return [...updatedProductsInCart, {
+                                   ...productToAdd,
+                                   cartQuantity: 1
+                              }]
+                         }
+                    }
+
+               }
           )
-
-          // await setDoc(doc(firestore, 'user_cart_data', 'asdf'), {
-          //      data: updatedData
-          // })
-
-          localStorage.setItem('products', JSON.stringify(updatedData))
-          setProducts(updatedData)
-
      }
 
+     // function addToCart(productToAdd: ProductType): void {
+     //      setProductsInCart((currentProductsInCart: ProductType[]) => {
+     //           const existingProduct = currentProductsInCart.find(product => product.id === productToAdd.id);
+     //           if (existingProduct) {
+     //                existingProduct.cartQuantity += 1;
+     //                return [...currentProductsInCart];
+     //           } else {
+     //                return [
+     //                     ...currentProductsInCart,
+     //                     {
+     //                          ...productToAdd,
+     //                          cartQuantity: 1
+     //                     }
+     //                ];
+     //           }
+     //      });
+     // }
+
      function removeFromCart(id: number): void {
-          const updatedData = products.map(
+          const updatedData = productsInCart.map(
                (item: ProductType) => (
                     item.id === id
                          ? {
@@ -198,12 +241,12 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                          : item
                )
           )
-          localStorage.setItem('products', JSON.stringify(updatedData))
-          setProducts(updatedData)
+          // localStorage.setItem('products', JSON.stringify(updatedData))
+          setProductsInCart(updatedData)
      }
 
      function removeAll(id: number): void {
-          const updatedData = products.map(
+          const updatedData = productsInCart.map(
                (item: ProductType) => (
                     item.id === id
                          ? {
@@ -213,12 +256,12 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                          : item
                )
           )
-          localStorage.setItem('products', JSON.stringify(updatedData))
-          setProducts(updatedData)
+          // localStorage.setItem('products', JSON.stringify(updatedData))
+          setProductsInCart(updatedData)
      }
 
      function clearCart(): void {
-          const updatedData = products.map(
+          const updatedData = productsInCart.map(
                (item: ProductType) => (
                     {
                          ...item,
@@ -226,12 +269,12 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                     }
                )
           )
-          localStorage.setItem('products', JSON.stringify(updatedData))
-          setProducts(updatedData)
+          // localStorage.setItem('products', JSON.stringify(updatedData))
+          setProductsInCart(updatedData)
      }
 
      return (
-          <ShoppingCartContext.Provider value={{ products, addToCart, removeFromCart, removeAll, clearCart }} >
+          <ShoppingCartContext.Provider value={{ products, productsInCart, addToCart, removeFromCart, removeAll, clearCart }} >
                {children}
           </ShoppingCartContext.Provider>
      )

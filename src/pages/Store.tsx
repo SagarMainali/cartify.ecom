@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Product from '../components/ProductInStore'
+import ProductInStore from '../components/ProductInStore'
 import { useShoppingCartContext } from '../context/context'
 import { ProductType } from '../types/types'
 
@@ -43,12 +43,12 @@ export default function Store() {
                </fieldset>
                <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5">
                     {selectedData === 'electronics'
-                         ? category_electronics.map(item => <Product key={item.id} {...item} />)
+                         ? category_electronics.map(product => <ProductInStore key={product.id} {...product} />)
                          : selectedData === 'jewelery'
-                              ? category_jewelery.map(item => <Product key={item.id} {...item} />)
+                              ? category_jewelery.map(product => <ProductInStore key={product.id} {...product} />)
                               : selectedData === 'mensClothing'
-                                   ? category_mensClothing.map(item => <Product key={item.id} {...item} />)
-                                   : category_womensClothing.map(item => <Product key={item.id} {...item} />)
+                                   ? category_mensClothing.map(product => <ProductInStore key={product.id} {...product} />)
+                                   : category_womensClothing.map(product => <ProductInStore key={product.id} {...product} />)
                     }
                </div>
           </div>
