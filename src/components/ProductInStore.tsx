@@ -18,11 +18,6 @@ export default function ProductInStore({ ...product }: ProductType) {
                          <h3>Price <span className="font-semibold text-md">${product.price}</span></h3>
                     </div>
                     <button onClick={() => addToCart(product)} className="bg-blue-500 py-2 text-white rounded-md w-full hover:scale-105 duration-150">Add to cart</button>
-                    {/* <div className="bottom-3 flex justify-center items-center">
-                         <button onClick={() => removeFromCart(id)} className="flex justify-center items-center bg-gray-300 rounded-full h-10 w-10 hover:scale-110 duration-150">-</button>
-                         <span className="px-3"><span className="font-semibold">{cartQuantity}</span> in cart</span>
-                         <button onClick={() => addToCart(id)} className="flex justify-center items-center bg-gray-300 rounded-full h-10 w-10 hover:scale-110 duration-150">+</button>
-                    </div> */}
                </div>
           </div>
      )

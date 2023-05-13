@@ -207,28 +207,9 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                               }]
                          }
                     }
-
                }
           )
      }
-
-     // function addToCart(productToAdd: ProductType): void {
-     //      setProductsInCart((currentProductsInCart: ProductType[]) => {
-     //           const existingProduct = currentProductsInCart.find(product => product.id === productToAdd.id);
-     //           if (existingProduct) {
-     //                existingProduct.cartQuantity += 1;
-     //                return [...currentProductsInCart];
-     //           } else {
-     //                return [
-     //                     ...currentProductsInCart,
-     //                     {
-     //                          ...productToAdd,
-     //                          cartQuantity: 1
-     //                     }
-     //                ];
-     //           }
-     //      });
-     // }
 
      function removeFromCart(id: number): void {
           const updatedData = productsInCart.map(
