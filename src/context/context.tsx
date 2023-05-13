@@ -239,33 +239,13 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
      }
 
      function removeFromCart(id: number): void {
-          const updatedData = productsInCart.map(
-               (item: ProductType) => (
-                    item.id === id
-                         ? {
-                              ...item,
-                              cartQuantity: item.cartQuantity - 1
-                         }
-                         : item
+          const updatedProductsInCart = productsInCart.filter(
+               (productInCart: ProductType) => (
+                    productInCart.id !== id
                )
           )
           // localStorage.setItem('products', JSON.stringify(updatedData))
-          setProductsInCart(updatedData)
-     }
-
-     function removeAll(id: number): void {
-          const updatedData = productsInCart.map(
-               (item: ProductType) => (
-                    item.id === id
-                         ? {
-                              ...item,
-                              cartQuantity: 0
-                         }
-                         : item
-               )
-          )
-          // localStorage.setItem('products', JSON.stringify(updatedData))
-          setProductsInCart(updatedData)
+          setProductsInCart(updatedProductsInCart)
      }
 
      function clearCart(): void {
@@ -282,7 +262,7 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
      }
 
      return (
-          <ShoppingCartContext.Provider value={{ products, productsInCart, addToCart, changeQuantity, removeFromCart, removeAll, clearCart }} >
+          <ShoppingCartContext.Provider value={{ products, productsInCart, addToCart, changeQuantity, removeFromCart, clearCart }} >
                {children}
           </ShoppingCartContext.Provider>
      )
