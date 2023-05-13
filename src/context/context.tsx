@@ -136,8 +136,6 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
 
      const [productsInCart, setProductsInCart] = useState<ProductType[]>([])
 
-     console.log(productsInCart)
-
      useEffect(() => {
           const fetchProducts = async () => {
                try {
@@ -173,18 +171,42 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
      function addToCart(productToAdd: ProductType): void {
           setProductsInCart(
                (currentProductsInCart: ProductType[]) => {
-                    if (currentProductsInCart.length === 0) {
-                         return [{
+                    let productMatch: boolean = false
+                    const updatedProductsInCart = currentProductsInCart.map(
+                         (productInCart: ProductType) => {
+                              if (productInCart.id === productToAdd.id) {
+                                   productMatch = true
+                                   return {
+                                        ...productInCart,
+                                        cartQuantity: productInCart.cartQuantity + 1
+                                   }
+                              }
+                              else {
+                                   return productInCart
+                              }
+                         }
+                    )
+                    if (productMatch) {
+                         return updatedProductsInCart
+                    }
+                    else {
+                         return [...updatedProductsInCart, {
                               ...productToAdd,
                               cartQuantity: 1
                          }]
                     }
-                    else {
-                         let productMatch: boolean = false
-                         const updatedProductsInCart = currentProductsInCart.map(
-                              (productInCart: ProductType) => {
-                                   if (productInCart.id === productToAdd.id) {
-                                        productMatch = true
+               }
+          )
+     }
+
+     function changeQuantity(id: number, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+          const { name } = e.currentTarget
+          setProductsInCart(
+               (currentItemsInCart: ProductType[]) => (
+                    currentItemsInCart.map(
+                         (productInCart: ProductType) => {
+                              if (productInCart.id === id) {
+                                   if (name === 'increment') {
                                         return {
                                              ...productInCart,
                                              cartQuantity: productInCart.cartQuantity + 1
@@ -192,22 +214,19 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                                    }
                                    else {
                                         return {
-                                             ...productInCart
+                                             ...productInCart,
+                                             cartQuantity: productInCart.cartQuantity - 1
                                         }
                                    }
                               }
-                         )
-                         if (productMatch) {
-                              return updatedProductsInCart
+                              else {
+                                   return {
+                                        ...productInCart
+                                   }
+                              }
                          }
-                         else {
-                              return [...updatedProductsInCart, {
-                                   ...productToAdd,
-                                   cartQuantity: 1
-                              }]
-                         }
-                    }
-               }
+                    )
+               )
           )
      }
 
@@ -255,7 +274,7 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
      }
 
      return (
-          <ShoppingCartContext.Provider value={{ products, productsInCart, addToCart, removeFromCart, removeAll, clearCart }} >
+          <ShoppingCartContext.Provider value={{ products, productsInCart, addToCart, changeQuantity, removeFromCart, removeAll, clearCart }} >
                {children}
           </ShoppingCartContext.Provider>
      )

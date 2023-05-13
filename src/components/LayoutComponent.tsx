@@ -2,12 +2,12 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { useShoppingCartContext } from '../context/context'
 
 export default function LayoutComponent() {
-     const { products } = useShoppingCartContext()
+     const { productsInCart } = useShoppingCartContext()
      function getTotalCartQuantity() {
-          if (products.length != 0) {
-               const totalCartQuantity = products.map(
-                    item => (
-                         item.cartQuantity
+          if (productsInCart.length != 0) {
+               const totalCartQuantity = productsInCart.map(
+                    product => (
+                         product.cartQuantity
                     )
                )
                return totalCartQuantity.reduce((result, number) => result + number)
