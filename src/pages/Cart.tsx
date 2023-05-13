@@ -1,9 +1,10 @@
-import { useShoppingCartContext } from "../context/context"
+import { useAuthContext, useShoppingCartContext } from "../context/context"
 import ProductInCart from "../components/ProductInCart"
 import { ProductType } from "../types/types"
 
 export default function Cart() {
-     const { productsInCart, clearCart } = useShoppingCartContext()
+     const { productsInCart } = useAuthContext()
+     const { clearCart } = useShoppingCartContext()
      const totalPrice = productsInCart.map(
           (item: ProductType) => (
                item.cartQuantity * item.price

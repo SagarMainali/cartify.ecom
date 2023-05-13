@@ -9,8 +9,8 @@ import {
      signOut,
      User
 } from 'firebase/auth'
-// import { doc, setDoc } from 'firebase/firestore'
-import { auth } from '../firebase/firebaseConfig'
+import { doc, setDoc, getDoc } from 'firebase/firestore'
+import { auth, firestore } from '../firebase/firebaseConfig'
 import { useNavigate } from "react-router-dom"
 
 
@@ -25,6 +25,8 @@ export const useAuthContext = () => {
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
+     const [productsInCart, setProductsInCart] = useState<ProductType[]>([])
+
      const navigate = useNavigate()
 
      const [loggedInUser, setLoggedInUser] = useState<User | null>(null)
@@ -36,9 +38,16 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
      // runs only once at the initial render however this initial run sets the onAuthStateChanged that immediately gets triggered with the current auth state 
      // and gets triggered everytime the auth state next time
      useEffect(() => {
-          const checkUserLoginStatus = onAuthStateChanged(auth, (currentUser) => {
+          const checkUserLoginStatus = onAuthStateChanged(auth, async (currentUser) => {
                if (currentUser) {
                     navigate('/')
+                    const docSnap = await getDoc(doc(firestore, 'user_cart_data', currentUser.uid))
+                    if (docSnap.exists()) {
+                         setProductsInCart(docSnap.data().productsInCart)
+                    } else {
+                         // docSnap.data() will be undefined in this case
+                         console.log("No such document!")
+                    }
                }
                else {
                     navigate('/login')
@@ -84,7 +93,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
      async function logout() {
           try {
-               signOut(auth)
+               await signOut(auth)
                navigate('/login')
           } catch (error) {
                console.log(error)
@@ -112,7 +121,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
      }
 
      return (
-          <AuthContext.Provider value={{ signUp, login, logout, loggedInUser, errorMsg }}>
+          <AuthContext.Provider value={{ signUp, login, logout, loggedInUser, errorMsg, setProductsInCart, productsInCart }}>
                {!blank && children}
           </AuthContext.Provider>
      )
@@ -130,11 +139,9 @@ export const useShoppingCartContext = () => {
 
 export const ShoppingCartContextProvider = ({ children }: { children: ReactNode }) => {
 
-     // const { loggedInUser } = useAuthContext()
+     const { productsInCart, setProductsInCart, loggedInUser } = useAuthContext()
 
      const [products, setProducts] = useState<ProductType[]>([])
-
-     const [productsInCart, setProductsInCart] = useState<ProductType[]>([])
 
      useEffect(() => {
           const fetchProducts = async () => {
@@ -152,9 +159,6 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                     })
                     setProducts(products_modified)
                     localStorage.setItem('products', JSON.stringify(products_modified))
-                    // await setDoc(doc(firestore, 'user_cart_data', 'asdf'), {
-                    //      data: allProducts
-                    // })
                } catch (error) {
                     console.log(error)
                }
@@ -168,35 +172,43 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
           }
      }, [])
 
-     function addToCart(productToAdd: ProductType): void {
-          setProductsInCart(
-               (currentProductsInCart: ProductType[]) => {
-                    let productMatch: boolean = false
-                    const updatedProductsInCart = currentProductsInCart.map(
-                         (productInCart: ProductType) => {
-                              if (productInCart.id === productToAdd.id) {
-                                   productMatch = true
-                                   return {
-                                        ...productInCart,
-                                        cartQuantity: productInCart.cartQuantity + 1
-                                   }
-                              }
-                              else {
-                                   return productInCart
-                              }
+     async function addToCart(productToAdd: ProductType): Promise<void> {
+          let productMatch: boolean = false
+          const updatedProductsInCart_match = productsInCart.map(
+               (productInCart: ProductType) => {
+                    if (productInCart.id === productToAdd.id) {
+                         productMatch = true
+                         return {
+                              ...productInCart,
+                              cartQuantity: productInCart.cartQuantity + 1
                          }
-                    )
-                    if (productMatch) {
-                         return updatedProductsInCart
                     }
                     else {
-                         return [...updatedProductsInCart, {
-                              ...productToAdd,
-                              cartQuantity: 1
-                         }]
+                         return productInCart
                     }
                }
           )
+          if (productMatch) {
+               // if statements nested for more readibility
+               if (loggedInUser) {
+                    await setDoc(doc(firestore, 'user_cart_data', loggedInUser.uid), {
+                         productsInCart: updatedProductsInCart_match
+                    })
+               }
+               setProductsInCart(updatedProductsInCart_match)
+          }
+          else {
+               const updatedProductsInCart_noMatch = [...updatedProductsInCart_match, {
+                    ...productToAdd,
+                    cartQuantity: 1
+               }]
+               if (loggedInUser) {
+                    await setDoc(doc(firestore, 'user_cart_data', loggedInUser.uid), {
+                         productsInCart: updatedProductsInCart_noMatch
+                    })
+               }
+               setProductsInCart(updatedProductsInCart_noMatch)
+          }
      }
 
      function changeQuantity(id: number, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -244,17 +256,15 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                     productInCart.id !== id
                )
           )
-          // localStorage.setItem('products', JSON.stringify(updatedData))
           setProductsInCart(updatedProductsInCart)
      }
 
      function clearCart(): void {
-          // localStorage.setItem('products', JSON.stringify(updatedData))
           setProductsInCart([])
      }
 
      return (
-          <ShoppingCartContext.Provider value={{ products, productsInCart, addToCart, changeQuantity, removeFromCart, clearCart }} >
+          <ShoppingCartContext.Provider value={{ products, addToCart, changeQuantity, removeFromCart, clearCart }} >
                {children}
           </ShoppingCartContext.Provider>
      )
