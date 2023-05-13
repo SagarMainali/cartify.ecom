@@ -249,16 +249,8 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
      }
 
      function clearCart(): void {
-          const updatedData = productsInCart.map(
-               (item: ProductType) => (
-                    {
-                         ...item,
-                         cartQuantity: 0
-                    }
-               )
-          )
           // localStorage.setItem('products', JSON.stringify(updatedData))
-          setProductsInCart(updatedData)
+          setProductsInCart([])
      }
 
      return (
