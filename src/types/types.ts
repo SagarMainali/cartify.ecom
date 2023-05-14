@@ -30,7 +30,7 @@ export type AuthContextType = {
 
 export type ProductContextType = {
      products: ProductType[],
-     addToCart: (productToAdd: ProductType) => Promise<void>,
+     addToCart: (productToAdd: ProductType) => void,
      changeQuantity: (id: number, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
      removeFromCart: (id: number) => void,
      clearCart: () => void,

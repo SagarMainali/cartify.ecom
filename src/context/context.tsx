@@ -45,7 +45,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                     if (docSnap.exists()) {
                          setProductsInCart(docSnap.data().productsInCart)
                     } else {
-                         // docSnap.data() will be undefined in this case
                          console.log("No such document!")
                     }
                }
@@ -139,16 +138,15 @@ export const useShoppingCartContext = () => {
 
 export const ShoppingCartContextProvider = ({ children }: { children: ReactNode }) => {
 
-     const { productsInCart, setProductsInCart, loggedInUser } = useAuthContext()
-
      const [products, setProducts] = useState<ProductType[]>([])
+
+     const { productsInCart, setProductsInCart, loggedInUser } = useAuthContext()
 
      useEffect(() => {
           const fetchProducts = async () => {
                try {
                     const response = await fetch(`https://fakestoreapi.com/products`)
                     const parsedData = await response.json()
-                    console.log(parsedData)
                     const products_modified = parsedData.map((item: ProductType) => {
                          // excluding unnecessary description property
                          const { description, ...rest } = item
@@ -172,50 +170,57 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
           }
      }, [])
 
-     async function addToCart(productToAdd: ProductType): Promise<void> {
-          let productMatch: boolean = false
-          const updatedProductsInCart_match = productsInCart.map(
-               (productInCart: ProductType) => {
-                    if (productInCart.id === productToAdd.id) {
-                         productMatch = true
-                         return {
-                              ...productInCart,
-                              cartQuantity: productInCart.cartQuantity + 1
+     // save data to firebase whenever there is any change in products in cart
+     useEffect(() => {
+          const saveDataToFirebase = async () => {
+               console.log('ran')
+               if (loggedInUser) {
+                    await setDoc(doc(firestore, 'user_cart_data', loggedInUser.uid), {
+                         productsInCart: productsInCart
+                    })
+               }
+          }
+          saveDataToFirebase()
+     }, [productsInCart])
+
+
+     function addToCart(productToAdd: ProductType): void {
+          setProductsInCart(
+               (currentProductsInCart: ProductType[]) => {
+                    let productMatch: boolean = false
+                    const updatedProductsInCart_match = currentProductsInCart.map(
+                         (productInCart: ProductType) => {
+                              if (productInCart.id === productToAdd.id) {
+                                   productMatch = true
+                                   return {
+                                        ...productInCart,
+                                        cartQuantity: productInCart.cartQuantity + 1
+                                   }
+                              }
+                              else {
+                                   return productInCart
+                              }
                          }
+                    )
+                    if (productMatch) {
+                         return updatedProductsInCart_match
                     }
                     else {
-                         return productInCart
+                         return ([...updatedProductsInCart_match, {
+                              ...productToAdd,
+                              cartQuantity: 1
+                         }])
                     }
                }
           )
-          if (productMatch) {
-               // if statements nested for more readibility
-               if (loggedInUser) {
-                    await setDoc(doc(firestore, 'user_cart_data', loggedInUser.uid), {
-                         productsInCart: updatedProductsInCart_match
-                    })
-               }
-               setProductsInCart(updatedProductsInCart_match)
-          }
-          else {
-               const updatedProductsInCart_noMatch = [...updatedProductsInCart_match, {
-                    ...productToAdd,
-                    cartQuantity: 1
-               }]
-               if (loggedInUser) {
-                    await setDoc(doc(firestore, 'user_cart_data', loggedInUser.uid), {
-                         productsInCart: updatedProductsInCart_noMatch
-                    })
-               }
-               setProductsInCart(updatedProductsInCart_noMatch)
-          }
      }
 
-     function changeQuantity(id: number, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+     // dynamic update by either incrementing or decrement based on the name of button
+     function changeQuantity(id: number, e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
           const { name } = e.currentTarget
           setProductsInCart(
-               (currentItemsInCart: ProductType[]) => (
-                    currentItemsInCart.map(
+               (currentProductsIncart: ProductType[]) => (
+                    currentProductsIncart.map(
                          (productInCart: ProductType) => {
                               if (productInCart.id === id) {
                                    if (name === 'increment') {
@@ -251,12 +256,15 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
      }
 
      function removeFromCart(id: number): void {
-          const updatedProductsInCart = productsInCart.filter(
-               (productInCart: ProductType) => (
-                    productInCart.id !== id
+          setProductsInCart(
+               (currentProductsIncart: ProductType[]) => (
+                    currentProductsIncart.filter(
+                         (productInCart: ProductType) => (
+                              productInCart.id !== id
+                         )
+                    )
                )
           )
-          setProductsInCart(updatedProductsInCart)
      }
 
      function clearCart(): void {
