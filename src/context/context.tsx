@@ -45,7 +45,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                     if (docSnap.exists()) {
                          setProductsInCart(docSnap.data().productsInCart)
                     } else {
-                         console.log("No such document!")
+                         console.log('Either signed out or this user has no cart data.')
                     }
                }
                else {
@@ -57,6 +57,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           return () => checkUserLoginStatus()
      }, [])
 
+     // signup
      async function signUp(email: string, password: string, confirm_pw?: string): Promise<void> {
           const validation: string = formValidation(email, password, confirm_pw)
           if (validation === 'pass') {
@@ -71,6 +72,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           }
      }
 
+     // signin
      async function login(email: string, password: string): Promise<void> {
           const validation: string = formValidation(email, password)
           if (validation === 'pass') {
@@ -90,6 +92,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           }
      }
 
+     // signout 
      async function logout() {
           try {
                await signOut(auth)
@@ -99,6 +102,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           }
      }
 
+     // perform validation and return either 'true' or 'false' for further processing 
      function formValidation(email: string, password: string, confirm_pw?: string) {
           if (!email || !password) {
                setErrorMsg('Empty field detected')
@@ -142,6 +146,7 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
 
      const { productsInCart, setProductsInCart, loggedInUser } = useAuthContext()
 
+     // see if product data is availabe in local storage, if not fetch and set to state
      useEffect(() => {
           const fetchProducts = async () => {
                try {
@@ -182,7 +187,7 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
           saveDataToFirebase()
      }, [productsInCart])
 
-
+     // add products to cart
      function addToCart(productToAdd: ProductType): void {
           setProductsInCart(
                (currentProductsInCart: ProductType[]) => {
@@ -240,11 +245,13 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                               }
                          }
                     )
+                    // remove product that has cartQuantity of 0
                     return updatedProductsInCart.filter((productInCart: ProductType) => productInCart.cartQuantity > 0);
                }
           )
      }
 
+     // remove specific product from cart
      function removeFromCart(id: number): void {
           setProductsInCart(
                (currentProductsIncart: ProductType[]) => (
@@ -257,6 +264,7 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
           )
      }
 
+     // set products in cart to empty
      function clearCart(): void {
           setProductsInCart([])
      }
