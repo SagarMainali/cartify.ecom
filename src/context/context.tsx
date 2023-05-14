@@ -173,7 +173,6 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
      // save data to firebase whenever there is any change in products in cart
      useEffect(() => {
           const saveDataToFirebase = async () => {
-               console.log('ran')
                if (loggedInUser) {
                     await setDoc(doc(firestore, 'user_cart_data', loggedInUser.uid), {
                          productsInCart: productsInCart
@@ -219,8 +218,8 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
      function changeQuantity(id: number, e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
           const { name } = e.currentTarget
           setProductsInCart(
-               (currentProductsIncart: ProductType[]) => (
-                    currentProductsIncart.map(
+               (currentProductsIncart: ProductType[]) => {
+                    const updatedProductsInCart = currentProductsIncart.map(
                          (productInCart: ProductType) => {
                               if (productInCart.id === id) {
                                    if (name === 'increment') {
@@ -230,28 +229,19 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                                         }
                                    }
                                    else {
-                                        if (productInCart.cartQuantity === 1) {
-                                             return {
-                                                  ...productInCart,
-                                                  cartQuantity: 1
-                                             }
-                                        }
-                                        else {
-                                             return {
-                                                  ...productInCart,
-                                                  cartQuantity: productInCart.cartQuantity - 1
-                                             }
+                                        return {
+                                             ...productInCart,
+                                             cartQuantity: productInCart.cartQuantity - 1
                                         }
                                    }
                               }
                               else {
-                                   return {
-                                        ...productInCart
-                                   }
+                                   return productInCart
                               }
                          }
                     )
-               )
+                    return updatedProductsInCart.filter((productInCart: ProductType) => productInCart.cartQuantity > 0);
+               }
           )
      }
 
