@@ -1,10 +1,20 @@
 
 # Cartify 
 
-Cartify is a mocking of an online store with variety of products categories 
-that lets user add those products to cart and perform required calculations based on the items added. Also Firebase's Authentication and Firestore has been integrated at the backend for authetication and database.
+Cartify is a mocking of an online store with variety of products categories that lets user add those products to cart and perform required calculations based on the items added. Also Firebase's Authentication and Firestore has been integrated at the backend for authetication and database.
 
-The goal of this project is to learn advance concepts in react while having fun.
+## Demo 
+
+https://cartify-cartify.netlify.app/
+
+
+## Features
+
+- Add products to cart
+- Firebase Auth + Firestore
+- Category of products
+- Solid Client Side + Firebase's Validation
+
 
 ## Run Locally
 
@@ -17,7 +27,7 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd my-project
+  cd cartify
 ```
 
 Install dependencies
@@ -29,10 +39,11 @@ Install dependencies
 Start the server
 
 ```bash
-  npm run start
+  npm run dev
 ```
 
 
-## Demo 
+## Screenshots
 
-https://cartify-cartify.netlify.app/
+![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+
