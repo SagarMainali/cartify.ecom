@@ -40,7 +40,7 @@ export default function SignupPage() {
                <input className="bg-slate-100 w-[20rem] px-4 py-2 rounded-md outline-0" name="password" type="password" placeholder="Password" onChange={handleChange_singup} value={formData.password} />
                <input className="bg-slate-100 w-[20rem] px-4 py-2 rounded-md outline-0" name="confirm_pw" type="password" placeholder="Confirm Password" onChange={handleChange_singup} value={formData.confirm_pw} />
                <button className="bg-blue-500 text-white px-4 py-2 rounded-md" onClick={() => signUp(formData.email, formData.password, formData.confirm_pw)}>Sign Up</button>
-               <h2 className="text-gray-600">Already have an account? <NavLink className='text-blue-500 font-semibold hover:underline' to='/login' replace>Login instead</NavLink></h2>
+               <h2 className="text-gray-600">Already have an account? <NavLink className='text-blue-500 font-semibold hover:underline' to='/login' replace>Login</NavLink></h2>
                {errorMsg && <p className="text-sm text-red-600 italic">*{errorMsg}*</p>}
           </div>
      )
