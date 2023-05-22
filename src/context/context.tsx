@@ -67,6 +67,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           if (validation === 'pass') {
                try {
                     errorMsg && setErrorMsg(null)
+                    setBlank(true)
+                    setLoading(true)
                     await createUserWithEmailAndPassword(auth, email, password)
                } catch (error: any) {
                     error.code === 'auth/email-already-in-use'
