@@ -12,6 +12,7 @@ import {
 import { doc, setDoc, getDoc } from 'firebase/firestore'
 import { auth, firestore } from '../firebase/firebaseConfig'
 import { useNavigate } from "react-router-dom"
+import Loading from "../components/loading";
 
 
 
@@ -35,6 +36,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
      const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
+     const [loading, setLoading] = useState<boolean>(false)
+
      // runs only once at the initial render however this initial run sets the onAuthStateChanged that immediately gets triggered with the current auth state 
      // and gets triggered everytime the auth state next time
      useEffect(() => {
@@ -52,6 +55,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                     navigate('/login')
                }
                setLoggedInUser(currentUser)
+               setLoading(false)
                setBlank(false)
           })
           return () => checkUserLoginStatus()
@@ -78,6 +82,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           if (validation === 'pass') {
                try {
                     errorMsg && setErrorMsg(null) //conditional prevents unnecessary render
+                    setBlank(true)
+                    setLoading(true)
                     await signInWithEmailAndPassword(auth, email, password)
                } catch (error: any) {
                     if (error.code === 'auth/user-not-found') {
@@ -126,6 +132,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
      return (
           <AuthContext.Provider value={{ signUp, login, logout, loggedInUser, errorMsg, setProductsInCart, productsInCart }}>
                {!blank && children}
+               {loading && <Loading />}
           </AuthContext.Provider>
      )
 }
