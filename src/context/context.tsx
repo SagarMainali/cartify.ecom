@@ -158,6 +158,8 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
 
      const { productsInCart, setProductsInCart, loggedInUser } = useAuthContext()
 
+     const [showMessage, setShowMessage] = useState<boolean>(false)
+
      // see if product data is availabe in local storage, if not fetch and set to state
      useEffect(() => {
           const fetchProducts = async () => {
@@ -199,6 +201,16 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
           saveDataToFirebase()
      }, [productsInCart])
 
+     // hide 'added to cart' message
+     useEffect(() => {
+          if (showMessage) {
+               let timer = setTimeout(() => {
+                    setShowMessage(false)
+               }, 1300)
+               return () => clearTimeout(timer)
+          }
+     }, [showMessage])
+
      // add products to cart
      function addToCart(productToAdd: ProductType): void {
           setProductsInCart(
@@ -229,6 +241,7 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                     }
                }
           )
+          setShowMessage(true)
      }
 
      // dynamic update by either incrementing or decrement based on the name of button
@@ -282,7 +295,7 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
      }
 
      return (
-          <ShoppingCartContext.Provider value={{ products, addToCart, changeQuantity, removeFromCart, clearCart }} >
+          <ShoppingCartContext.Provider value={{ products, addToCart, changeQuantity, removeFromCart, clearCart, showMessage }} >
                {children}
           </ShoppingCartContext.Provider>
      )
