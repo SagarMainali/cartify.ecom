@@ -1,7 +1,12 @@
+import '../loading.css'
+
 export default function Loading() {
      return (
           <div className="loading h-screen flex items-center justify-center">
-               <span>please wait...</span>
+               <div className="lds-ripple">
+                    <div></div>
+                    <div></div>
+               </div>
           </div>
      )
 }
