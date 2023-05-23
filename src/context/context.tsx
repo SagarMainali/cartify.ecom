@@ -71,6 +71,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                     setLoading(true)
                     await createUserWithEmailAndPassword(auth, email, password)
                } catch (error: any) {
+                    setBlank(false)
+                    setLoading(false)
                     error.code === 'auth/email-already-in-use'
                          ? setErrorMsg('Email already in use')
                          : console.log(error)
@@ -88,6 +90,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                     setLoading(true)
                     await signInWithEmailAndPassword(auth, email, password)
                } catch (error: any) {
+                    setBlank(false)
+                    setLoading(false)
                     if (error.code === 'auth/user-not-found') {
                          setErrorMsg('User not found')
                     } else if (error.code === 'auth/wrong-password') {
