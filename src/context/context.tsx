@@ -40,9 +40,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
      // and gets triggered everytime the auth state next time
      useEffect(() => {
           const checkUserLoginStatus = onAuthStateChanged(auth, async (currentUser) => {
+               setLoggedInUser(currentUser)
                if (currentUser) {
-                    setLoggedInUser(currentUser)
-                    setLoading(false)
                     navigate('/')
                     const docSnap = await getDoc(doc(firestore, 'user_cart_data', currentUser.uid))
                     if (docSnap.exists()) {
@@ -52,10 +51,15 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                     }
                }
                else {
-                    setLoggedInUser(currentUser)
-                    setLoading(false)
                     navigate('/login')
                }
+               setLoading(false)
+               // the order of this particular setState is very important because it determines whether to render its children or not. the  children
+               // may have their own state and useEffect inside of it that may act weird if the order of this setState is not set correctly.
+               // in this case this setState was placed at the beginning of the function which enabled to render its children, below this another
+               // state was updated that allowed to access that children leading to running one of the useEffect of that children which updated the
+               // data to null on browser refresh. this was solved by placing this setState at last which prevented other setState from accessing th
+               // children.
           })
           return () => checkUserLoginStatus()
      }, [])
@@ -103,7 +107,6 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
      async function logout() {
           try {
                await signOut(auth)
-               navigate('/login')
           } catch (error) {
                console.log(error)
           }
