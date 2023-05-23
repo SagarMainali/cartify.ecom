@@ -42,7 +42,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           const checkUserLoginStatus = onAuthStateChanged(auth, async (currentUser) => {
                setLoggedInUser(currentUser)
                if (currentUser) {
-                    navigate('/')
+                    // navigate('/') // this is triggered inside login()
                     const docSnap = await getDoc(doc(firestore, 'user_cart_data', currentUser.uid))
                     if (docSnap.exists()) {
                          setProductsInCart(docSnap.data().productsInCart)
@@ -72,6 +72,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                     errorMsg && setErrorMsg(null)
                     setLoading(true)
                     await createUserWithEmailAndPassword(auth, email, password)
+                    navigate('/') //this gets overwritten with the else statement inside of the onAuthStateChanged()
                } catch (error: any) {
                     setLoading(false)
                     error.code === 'auth/email-already-in-use'
@@ -89,6 +90,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                     errorMsg && setErrorMsg(null) //conditional prevents unnecessary render
                     setLoading(true)
                     await signInWithEmailAndPassword(auth, email, password)
+                    navigate('/') //this gets overwritten with the else statement inside of the onAuthStateChanged()
                } catch (error: any) {
                     setLoading(false)
                     if (error.code === 'auth/user-not-found') {
