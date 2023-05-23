@@ -32,17 +32,17 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
      const [loggedInUser, setLoggedInUser] = useState<User | null>(null)
 
-     const [blank, setBlank] = useState<boolean>(true)
-
      const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
-     const [loading, setLoading] = useState<boolean>(false)
+     const [loading, setLoading] = useState<boolean>(true)
 
      // runs only once at the initial render however this initial run sets the onAuthStateChanged that immediately gets triggered with the current auth state 
      // and gets triggered everytime the auth state next time
      useEffect(() => {
           const checkUserLoginStatus = onAuthStateChanged(auth, async (currentUser) => {
                if (currentUser) {
+                    setLoggedInUser(currentUser)
+                    setLoading(false)
                     navigate('/')
                     const docSnap = await getDoc(doc(firestore, 'user_cart_data', currentUser.uid))
                     if (docSnap.exists()) {
@@ -52,11 +52,10 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                     }
                }
                else {
+                    setLoggedInUser(currentUser)
+                    setLoading(false)
                     navigate('/login')
                }
-               setLoggedInUser(currentUser)
-               setLoading(false)
-               setBlank(false)
           })
           return () => checkUserLoginStatus()
      }, [])
@@ -67,11 +66,9 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           if (validation === 'pass') {
                try {
                     errorMsg && setErrorMsg(null)
-                    setBlank(true)
                     setLoading(true)
                     await createUserWithEmailAndPassword(auth, email, password)
                } catch (error: any) {
-                    setBlank(false)
                     setLoading(false)
                     error.code === 'auth/email-already-in-use'
                          ? setErrorMsg('Email already in use')
@@ -86,11 +83,9 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           if (validation === 'pass') {
                try {
                     errorMsg && setErrorMsg(null) //conditional prevents unnecessary render
-                    setBlank(true)
                     setLoading(true)
                     await signInWithEmailAndPassword(auth, email, password)
                } catch (error: any) {
-                    setBlank(false)
                     setLoading(false)
                     if (error.code === 'auth/user-not-found') {
                          setErrorMsg('User not found')
@@ -137,8 +132,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
      return (
           <AuthContext.Provider value={{ signUp, login, logout, loggedInUser, errorMsg, setProductsInCart, productsInCart }}>
-               {!blank && children}
-               {loading && <Loading />}
+               {loading ? <Loading /> : children}
           </AuthContext.Provider>
      )
 }
