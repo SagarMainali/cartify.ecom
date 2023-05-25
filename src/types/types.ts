@@ -34,5 +34,4 @@ export type ProductContextType = {
      changeQuantity: (id: number, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void,
      removeFromCart: (id: number) => void,
      clearCart: () => void,
-     showMessage: boolean
 }

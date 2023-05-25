@@ -2,6 +2,8 @@ import { useState } from 'react'
 import ProductInStore from '../components/ProductInStore'
 import { useShoppingCartContext } from '../context/context'
 import { ProductType } from '../types/types'
+import { ToastContainer } from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"
 
 export default function Store() {
 
@@ -11,7 +13,7 @@ export default function Store() {
           setSelectedData(event.target.value)
      }
 
-     const { products, showMessage } = useShoppingCartContext()
+     const { products } = useShoppingCartContext()
 
      const category_electronics = products.filter(
           (item: ProductType) => item.category === 'electronics'
@@ -51,7 +53,18 @@ export default function Store() {
                                    : category_womensClothing.map(product => <ProductInStore key={product.id} {...product} />)
                     }
                </div>
-               {showMessage && <div className="text-sm text-white font-semibold bg-gray-600 px-3 py-1 rounded-md fixed left-2/4 bottom-4 -translate-x-2/4">"Added to cart"</div>}
+               <ToastContainer
+                    position="bottom-center"
+                    autoClose={1000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+               />
           </div>
      )
 }

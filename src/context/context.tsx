@@ -12,7 +12,8 @@ import {
 import { doc, setDoc, getDoc } from 'firebase/firestore'
 import { auth, firestore } from '../firebase/firebaseConfig'
 import { useNavigate } from "react-router-dom"
-import Loading from "../components/loading";
+import Loading from "../components/loading"
+import { toast } from "react-toastify";
 
 
 
@@ -154,11 +155,11 @@ export const useShoppingCartContext = () => {
 
 export const ShoppingCartContextProvider = ({ children }: { children: ReactNode }) => {
 
+     const notify = () => toast("Added to cart")
+
      const [products, setProducts] = useState<ProductType[]>([])
 
      const { productsInCart, setProductsInCart, loggedInUser } = useAuthContext()
-
-     const [showMessage, setShowMessage] = useState<boolean>(false)
 
      // see if product data is availabe in local storage, if not fetch and set to state
      useEffect(() => {
@@ -201,16 +202,6 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
           saveDataToFirebase()
      }, [productsInCart])
 
-     // hide 'added to cart' message
-     useEffect(() => {
-          if (showMessage) {
-               let timer = setTimeout(() => {
-                    setShowMessage(false)
-               }, 1300)
-               return () => clearTimeout(timer)
-          }
-     }, [showMessage])
-
      // add products to cart
      function addToCart(productToAdd: ProductType): void {
           setProductsInCart(
@@ -241,7 +232,7 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
                     }
                }
           )
-          setShowMessage(true)
+          notify()
      }
 
      // dynamic update by either incrementing or decrement based on the name of button
@@ -295,7 +286,7 @@ export const ShoppingCartContextProvider = ({ children }: { children: ReactNode 
      }
 
      return (
-          <ShoppingCartContext.Provider value={{ products, addToCart, changeQuantity, removeFromCart, clearCart, showMessage }} >
+          <ShoppingCartContext.Provider value={{ products, addToCart, changeQuantity, removeFromCart, clearCart }} >
                {children}
           </ShoppingCartContext.Provider>
      )
