@@ -13,7 +13,7 @@ import { doc, setDoc, getDoc } from 'firebase/firestore'
 import { auth, firestore } from '../firebase/firebaseConfig'
 import { useNavigate } from "react-router-dom"
 import Loading from "../components/loading"
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast"
 
 
 
@@ -155,7 +155,13 @@ export const useShoppingCartContext = () => {
 
 export const ShoppingCartContextProvider = ({ children }: { children: ReactNode }) => {
 
-     const notify = () => toast("Added to cart")
+     const notify = () => toast('Added to cart', {
+          duration: 2000,
+          position: 'bottom-center',
+          style: {
+
+          }
+     })
 
      const [products, setProducts] = useState<ProductType[]>([])
 

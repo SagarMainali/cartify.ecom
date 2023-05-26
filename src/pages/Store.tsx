@@ -2,8 +2,7 @@ import { useState } from 'react'
 import ProductInStore from '../components/ProductInStore'
 import { useShoppingCartContext } from '../context/context'
 import { ProductType } from '../types/types'
-import { ToastContainer } from 'react-toastify'
-import "react-toastify/dist/ReactToastify.css"
+import { Toaster } from 'react-hot-toast'
 
 export default function Store() {
 
@@ -53,18 +52,7 @@ export default function Store() {
                                    : category_womensClothing.map(product => <ProductInStore key={product.id} {...product} />)
                     }
                </div>
-               <ToastContainer
-                    position="bottom-center"
-                    autoClose={1000}
-                    hideProgressBar={false}
-                    newestOnTop={false}
-                    closeOnClick
-                    rtl={false}
-                    pauseOnFocusLoss
-                    draggable
-                    pauseOnHover
-                    theme="light"
-               />
+               <Toaster />
           </div>
      )
 }
