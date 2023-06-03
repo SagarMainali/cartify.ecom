@@ -49,8 +49,7 @@ Start the server
 
 ## Screenshots
 
-![Login-Signup](https://github.com/SagarMainali/cartify/blob/master/public/ss_for_readme/login-signup.png?raw=true)
-![Homepage](https://github.com/SagarMainali/cartify/blob/master/public/ss_for_readme/homepage.png?raw=true)
-![Store](https://github.com/SagarMainali/cartify/blob/master/public/ss_for_readme/store.png?raw=true)
-![Cart](https://github.com/SagarMainali/cartify/blob/master/public/ss_for_readme/cart.png?raw=true)
-
+![Login-Signup](/public/ss_for_readme/login-signup.png)
+![Homepage](/public/ss_for_readme/homepage.png)
+![Store](/public/ss_for_readme/store.png)
+![Cart](/public/ss_for_readme/cart.png)
